@@ -2,11 +2,11 @@
 
 As an AI research engineer, when I start a new project or research a topic, I look for papers, models, datasets, blogs, and existing implementations to understand what is available and what might be useful. This got me thinking: could I automate this part of my work with an AI agent? That was the idea behind this project.
 
-The project takes a research question, searches for relevant resources, reads available source material, and brings the findings together into a report with source links. It uses specialist agents to cover different parts of the question and combines their work into one answer, with supporting evidence and any gaps identified during the research.
+The project takes a research question, searches for relevant resources, reads available source material, and brings the findings together into a report with source links. It uses **specialist agents** to cover different parts of the question and combines their work into one answer, with supporting evidence and any gaps identified during the research.
 
 ## Installation
 
-The project requires Python 3.14 or newer and `uv` for dependency and virtual environment management.
+The project requires **Python 3.14 or newer** and `uv` for dependency and virtual environment management.
 Run the following commands from the project directory to install the dependencies and set up the environment file:
 
 ```bash
@@ -14,7 +14,7 @@ uv sync
 cp -n .env.example .env
 ```
 
-- Add `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` to `.env` for LLM usage. The Anthropic key enables the optional reviewer.
+- Add `OPENAI_API_KEY` and `ANTHROPIC_API_KEY` to `.env` for LLM usage. The Anthropic key enables the **optional reviewer**.
 - For search tools that require credentials, create API keys on the respective providers' websites and add them to the `.env` file.
 
 ## Usage
@@ -48,10 +48,10 @@ Include requirements such as annotation type, license, or deployment environment
 
 The master selects between one and four specialists based on the question. All specialists inherit from `ResearchAgent`, which handles query preparation, source extraction, and synthesis. Its search stage has four parallel branches:
 
-1. **Text search** - keyword and fielded searches through Kaggle, arXiv, or GitHub.
-2. **Semantic search** - natural-language discovery through Hugging Face and OpenAlex.
-3. **Web search** - Google results and snippets through Serper.
-4. **AI search** - Tavily web results and Gemini responses grounded in Google Search.
+1. **Text search** - keyword and fielded searches through **Kaggle**, **arXiv**, or **GitHub**.
+2. **Semantic search** - natural-language discovery through **Hugging Face** and **OpenAlex**.
+3. **Web search** - Google results and snippets through **Serper**.
+4. **AI search** - **Tavily** web results and **Gemini** responses grounded in Google Search.
 
 Each specialist configures its own providers and leaves unused branches empty. The agents have the following roles:
 
@@ -92,7 +92,7 @@ A master run follows a fixed sequence, with parallel work inside the specialist 
 
 ## Architecture
 
-The project uses a multi-agent orchestrator–worker pattern built with LangGraph. The master uses `Send` to dispatch selected specialists in parallel (fan-out), then gathers their results for synthesis (fan-in) and optional review. The implementation is organized into a small set of modules:
+The project uses a multi-agent **orchestrator–worker pattern** built with LangGraph. The master uses **`Send`** to dispatch selected specialists in parallel (**fan-out**), then gathers their results for synthesis (**fan-in**) and optional review. The implementation is organized into a small set of modules:
 
 - [agent.py](agent.py): specialist and master LangGraph workflows.
 - [tools.py](tools.py): provider requests, query guidance, and result preparation.
@@ -144,15 +144,15 @@ Specialist findings are linked to the resources that support them. The applicati
 
 ### Web and PDFs
 
-The application reads available web pages and extracts text from PDFs to give the agents more context than search snippets alone. It reads up to the first 40 pages and 50,000 characters of a PDF. Scanned pages and complex tables may not be fully captured. If a page cannot be read, the original search evidence is still available.
+The application reads available web pages and extracts text from PDFs to give the agents more context than search snippets alone. It reads up to the **first 40 pages and 50,000 characters** of a PDF. Scanned pages and complex tables may not be fully captured. If a page cannot be read, the original search evidence is still available.
 
 ### Parallelism and records
 
-Selected specialists and their searches run in parallel, with up to five source pages processed at once. Each run is saved by default, including its searches, extracted content, findings, and final answer. These records make it easier to review the sources behind an answer or investigate what happened when part of a run fails.
+Selected specialists and their searches run in parallel, with up to five source pages processed at once. Each run is **saved by default**, including its searches, extracted content, findings, and final answer. These records make it easier to review the sources behind an answer or investigate what happened when part of a run fails.
 
 ### Failures and limits
 
-Some temporary HTTP failures are retried, with up to four attempts. Search calls time out after 60 seconds (100 for Gemini), routing and synthesis after 180 seconds, and page processing after 20 seconds or 5 MB of downloaded content. There is no overall run deadline. Other searches can continue if a tool fails. If specialist synthesis fails, its search results remain in saved runs but are not passed to the master. A failed review falls back to the draft; routing or master synthesis failures stop the run.
+Some temporary HTTP failures are retried, with up to four attempts. Search calls time out after 60 seconds (100 for Gemini), routing and synthesis after 180 seconds, and page processing after 20 seconds or 5 MB of downloaded content. There is **no overall run deadline**. Other searches can continue if a tool fails. If specialist synthesis fails, its search results remain in saved runs but are **not passed to the master**. A failed review falls back to the draft; routing or master synthesis failures stop the run.
 
 ## Configuration
 
