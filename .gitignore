@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Local configuration and caches
+/.agents/
+/.codex/
+/.aws/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local credentials; keep the sanitized setup template versionable.
+.env
+.env.*
+!.env.example
+
+# Saved research runs
+/runs/
+
+# Tests
+/tests/
