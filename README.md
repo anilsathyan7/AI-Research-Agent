@@ -92,7 +92,7 @@ A master run follows a fixed sequence, with parallel work inside the specialist 
 
 ## Architecture
 
-The implementation is organized into a small set of modules:
+The project uses a multi-agent orchestrator–worker pattern built with LangGraph. The master uses `Send` to dispatch selected specialists in parallel (fan-out), then gathers their results for synthesis (fan-in) and optional review. The implementation is organized into a small set of modules:
 
 - [agent.py](agent.py): specialist and master LangGraph workflows.
 - [tools.py](tools.py): provider requests, query guidance, and result preparation.
